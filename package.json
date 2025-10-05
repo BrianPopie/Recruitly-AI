@@ -10,12 +10,18 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.58.0",
+    "docx-parser": "^0.2.1",
     "framer-motion": "^12.23.22",
     "mammoth": "^1.11.0",
     "multiparty": "^4.2.3",
     "next": "15.5.4",
     "node-fetch": "^3.3.2",
+    "openai": "^6.1.0",
+    "pdf-lib": "^1.17.1",
     "pdf-parse": "^2.1.7",
+    "pdf-parse-fixed": "^1.1.1",
+    "pdf2json": "^3.2.2",
+    "pdfjs-dist": "^5.4.296",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "recharts": "^3.2.1"
@@ -23,7 +29,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
+    "@types/node": "^20.19.19",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
