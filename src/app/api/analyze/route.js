@@ -39,40 +39,49 @@ export async function POST(req) {
       }
 
       const prompt = `
-You are a professional HR analyst. 
+You are Recruitly AI — a professional HR analyst specializing in candidate evaluation and talent fit analysis.
 
-Job description:
+Analyze the following CV based on the given job description.
+
+Job Description:
 ${jobDesc}
 
 Candidate CV:
 ${text}
 
-Please analyze the candidate’s CV against the job description with the following instructions:
+Follow these instructions carefully:
 
-1. Provide a **match score (0–100)** indicating how well the candidate fits the job.
-2. List **3 key strengths** that are directly relevant to the skills, experience, and qualifications mentioned in the job description. Do **not** include generic strengths unrelated to the job.
-3. List **2 weaknesses** that could affect the candidate’s suitability for this specific role.
-4. Respond in **plain, readable text** with headings, bullet points, and separators. 
-5. Do **not** use JSON or any other format.  
-6. Include the candidate's name or CV file name at the top.
+1. Provide a **Match Score (0–100)** that reflects how well the candidate’s skills, experience, and qualifications align with the job requirements.
+2. Identify **3 key strengths** that are clearly and directly relevant to the job description.
+3. Identify **2 weaknesses or gaps** that could limit the candidate’s performance or fit for the role.
+4. Maintain a **professional and structured tone** — use headings, bullet points, and short, clear sentences.
+5. Do **not** use JSON, tables, or code blocks.
+6. Include the **candidate’s name** (or CV file name) at the top.
+7. End with a **concise summary (2–3 sentences)** highlighting the candidate’s overall fit and hiring potential.
 
-Example format:
+Use the following output format exactly:
 
-===== Candidate Name =====
-Match Score: 85
+──────────────────────────────
+Candidate: [Full Name or File Name]
+Match Score: [Number]/100
 
-Relevant Strengths:
-- Strength 1 (directly relevant to job description)
+🔹 **Key Strengths**
+- Strength 1 (relevant to job)
 - Strength 2
 - Strength 3
 
-Weaknesses:
+🔸 **Weaknesses / Gaps**
 - Weakness 1
 - Weakness 2
+
+🧭 **Summary**
+A short, objective summary of the candidate’s overall fit for the position and hiring recommendation.
+──────────────────────────────
 `;
 
+
       const response = await openai.chat.completions.create({
-        model: "gpt-5",
+        model: "gpt-4o-mini",
         messages: [{ role: "user", content: prompt }],
       });
 
