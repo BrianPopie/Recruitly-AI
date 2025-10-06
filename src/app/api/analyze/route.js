@@ -1,8 +1,15 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 import { pdf } from "pdf-parse"; // ✅ named import for ESM
+import { createClient } from "@supabase/supabase-js";
 
 export const runtime = "nodejs";
+
+// Supabase client
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_KEY
+);
 
 // Extract text from PDF
 async function extractTextFromPDF(buffer) {
@@ -61,32 +68,43 @@ Follow these instructions carefully:
 
 Use the following output format exactly:
 
-──────────────────────────────
+
 Candidate: [Full Name or File Name]
 Match Score: [Number]/100
 
-🔹 **Key Strengths**
+🔹Key Strengths
 - Strength 1 (relevant to job)
 - Strength 2
 - Strength 3
 
-🔸 **Weaknesses / Gaps**
+🔸Weaknesses / Gaps
 - Weakness 1
 - Weakness 2
 
-🧭 **Summary**
+🧭 Summary
 A short, objective summary of the candidate’s overall fit for the position and hiring recommendation.
-──────────────────────────────
 `;
 
-
       const response = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
+        model: "gpt-5",
         messages: [{ role: "user", content: prompt }],
       });
 
       const analysis = response.choices?.[0]?.message?.content?.trim() || "No response.";
       output += `===== ${file.name} =====\n${analysis}\n\n`;
+
+      // --- SAVE TO SUPABASE ----
+      const { error } = await supabase
+        .from("candidate_analysis")
+        .insert([
+          {
+            file_name: file.name,
+            job_description: jobDesc,
+            analysis: analysis,
+          },
+        ]);
+
+      if (error) console.error("Supabase insert error:", error.message);
     }
 
     return new NextResponse(output, {
@@ -98,3 +116,4 @@ A short, objective summary of the candidate’s overall fit for the position and
     return new NextResponse(`Failed to analyze CVs: ${err.message}`, { status: 500 });
   }
 }
+  
