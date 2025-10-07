@@ -1,4 +1,4 @@
-import AICVAssistantUI from "./components/AICVAssistantUI";
+import AICVAssistantUI from "./api/analyze/AICVAssistantUI";
 
 
 export default function Home() {
